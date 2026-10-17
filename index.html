@@ -62,6 +62,9 @@
                 <button onclick="scrollToSection('standings')" id="nav-standings" class="nav-btn px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 whitespace-nowrap bg-[#E0A100] text-[#4A101A] shadow-md flex-1">
                     <i data-lucide="trophy" class="w-4 h-4"></i> Conference Standings
                 </button>
+                <button onclick="scrollToSection('schedule')" id="nav-schedule" class="nav-btn px-4 py-2.5 rounded-lg text-xs font-bold text-[#E0A100] hover:text-white transition-all flex items-center justify-center gap-2 whitespace-nowrap flex-1">
+                    <i data-lucide="calendar" class="w-4 h-4"></i> Conference Calendar & Results
+                </button>
                 <button onclick="scrollToSection('all-conference')" id="nav-all-conference" class="nav-btn px-4 py-2.5 rounded-lg text-xs font-bold text-[#E0A100] hover:text-white transition-all flex items-center justify-center gap-2 whitespace-nowrap flex-1">
                     <i data-lucide="star" class="w-4 h-4"></i> 2026 All-Conference Team
                 </button>
@@ -74,11 +77,10 @@
 
     <main class="max-w-[1480px] mx-auto px-4 sm:px-8 mt-8 space-y-16">
 
-        <!-- Hero Banner Title -->
-        <section class="bg-maroon-card rounded-2xl p-8 border border-[#E0A100]/40 glow-gold relative overflow-hidden text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-6">
+        <section class="bg-maroon-card rounded-2xl p-8 border border-[#E0A100]/40 glow-gold relative overflow-hidden text-center flex flex-col items-center justify-center gap-6">
             <div class="absolute inset-0 bg-[radial-gradient(#E0A100_1px,transparent_1px)] [background-size:16px_16px] opacity-10 pointer-events-none"></div>
             
-            <div class="space-y-3 max-w-3xl relative z-10 w-full text-center">
+            <div class="space-y-3 relative z-10 w-full text-center">
                 <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight">SOUTHERN MARYLAND SOCCER COACHES ASSOCIATION</h2>
             </div>
         </section>
@@ -110,6 +112,40 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-[#E0A100]/15 font-semibold text-white" id="standingsBody">
+                            <!-- JS populated -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="schedule" class="space-y-6 scroll-mt-24">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E0A100]/30 pb-4">
+                <div>
+                    <h2 class="text-2xl font-black text-white flex items-center gap-2">
+                        <i data-lucide="calendar" class="w-6 h-6 text-[#E0A100]"></i> Conference Calendar & Results
+                    </h2>
+                    <p class="text-xs text-[#E0A100]/90 mt-1 font-medium">Complete SMAC schedule and game-by-game results</p>
+                </div>
+
+                <!-- Search Filter -->
+                <div class="relative w-full sm:w-64">
+                    <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#E0A100]"></i>
+                    <input type="text" id="resultsSearch" onkeyup="filterResults()" placeholder="Filter team or date..." class="w-full pl-9 pr-3 py-2 bg-maroon-card border border-[#E0A100]/30 rounded-xl text-xs font-bold text-white placeholder-[#E0A100]/50 focus:outline-none focus:ring-2 focus:ring-[#E0A100]" />
+                </div>
+            </div>
+
+            <div class="bg-maroon-main rounded-2xl p-6 border border-[#E0A100]/30 shadow-xl">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead>
+                            <tr class="bg-maroon-card text-[#E0A100] text-xs font-black uppercase tracking-wider rounded-lg border-b border-[#E0A100]/30">
+                                <th class="p-4 rounded-l-lg">Date</th>
+                                <th class="p-4">Matchup</th>
+                                <th class="p-4 text-center rounded-r-lg">Score / Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-[#E0A100]/15 font-medium text-white" id="resultsBody">
                             <!-- JS populated -->
                         </tbody>
                     </table>
@@ -177,7 +213,6 @@
 
     </main>
 
-    <!-- SEASON ARCHIVE RESULTS MODAL -->
     <div id="archiveModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-maroon-main w-full max-w-4xl max-h-[90vh] rounded-3xl border-2 border-[#E0A100] shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200">
             <div class="bg-maroon-card p-6 border-b border-[#E0A100]/30 flex items-center justify-between">
@@ -207,7 +242,6 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="max-w-[1480px] mx-auto px-4 sm:px-8 mt-16 pt-8 border-t border-[#E0A100]/30 text-center sm:text-left flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-[#E0A100]/80">
         <div>
             <p class="font-bold text-white">Southern Maryland Soccer Coaches Association (SMSCA)</p>
@@ -216,7 +250,6 @@
         <p>© 2026 SMSCA. All rights reserved.</p>
     </footer>
 
-    <!-- JavaScript Data and Logic -->
     <script>
         // Standings Data including Ties (T)
         const smacStandings = [
@@ -233,6 +266,72 @@
             { team: "Henry E. Lackey", w: 2, l: 8, t: 0, gp: 10, pct: ".200" },
             { team: "Westlake", w: 0, l: 8, t: 0, gp: 8, pct: ".000" },
             { team: "St. Charles", w: 0, l: 10, t: 0, gp: 10, pct: ".000" }
+        ];
+
+        // Conference Game Results (Without LP Match tags)
+        const smacResults = [
+            { date: "Oct 15, 2026", matchup: "Henry E. Lackey vs. Chopticon", score: "0 – 8" },
+            { date: "Oct 15, 2026", matchup: "Calvert vs. La Plata", score: "6 – 0" },
+            { date: "Oct 15, 2026", matchup: "Huntingtown vs. St. Charles", score: "13 – 0" },
+            { date: "Oct 15, 2026", matchup: "McDonough vs. Westlake", score: "18 – 1" },
+            { date: "Oct 15, 2026", matchup: "Great Mills vs. Leonardtown", score: "0 – 8" },
+            { date: "Oct 13, 2026", matchup: "Patuxent vs. Calvert", score: "0 – 12" },
+            { date: "Oct 13, 2026", matchup: "Henry E. Lackey vs. North Point", score: "0 – 3" },
+            { date: "Oct 13, 2026", matchup: "Huntingtown vs. Northern-C", score: "1 – 2" },
+            { date: "Oct 13, 2026", matchup: "La Plata vs. Westlake", score: "10 – 0" },
+            { date: "Oct 08, 2026", matchup: "Patuxent vs. Great Mills", score: "6 – 2" },
+            { date: "Oct 08, 2026", matchup: "Calvert vs. McDonough", score: "0 – 0" },
+            { date: "Oct 08, 2026", matchup: "Huntingtown vs. La Plata", score: "3 – 0" },
+            { date: "Oct 08, 2026", matchup: "Westlake vs. Northern-C", score: "0 – 12" },
+            { date: "Oct 08, 2026", matchup: "St. Charles vs. North Point", score: "0 – 9" },
+            { date: "Oct 08, 2026", matchup: "Chopticon vs. Leonardtown", score: "0 – 8" },
+            { date: "Oct 06, 2026", matchup: "Patuxent vs. Huntingtown", score: "0 – 10" },
+            { date: "Oct 06, 2026", matchup: "Henry E. Lackey vs. St. Charles", score: "8 – 0" },
+            { date: "Oct 06, 2026", matchup: "Calvert vs. Westlake", score: "12 – 0" },
+            { date: "Oct 06, 2026", matchup: "La Plata vs. North Point", score: "0 – 3" },
+            { date: "Oct 06, 2026", matchup: "McDonough vs. Northern-C", score: "1 – 2" },
+            { date: "Oct 06, 2026", matchup: "Chopticon vs. Great Mills", score: "1 – 0" },
+            { date: "Oct 05, 2026", matchup: "Patuxent vs. St. Charles", score: "6 – 0" },
+            { date: "Oct 02, 2026", matchup: "North Point vs. Bowie", score: "8 – 0" },
+            { date: "Oct 01, 2026", matchup: "Northern vs. La Plata", score: "7 – 3" },
+            { date: "Sep 29, 2026", matchup: "McDonough vs. La Plata", score: "8 – 0" },
+            { date: "Sep 26, 2026", matchup: "Calvert vs. Leonardtown", score: "2 – 3" },
+            { date: "Sep 25, 2026", matchup: "Northern-C vs. Great Mills", score: "7 – 1" },
+            { date: "Sep 24, 2026", matchup: "Patuxent vs. McDonough", score: "1 – 9" },
+            { date: "Sep 24, 2026", matchup: "Henry E. Lackey vs. Great Mills", score: "0 – 8" },
+            { date: "Sep 24, 2026", matchup: "Calvert vs. Chopticon", score: "6 – 0" },
+            { date: "Sep 24, 2026", matchup: "Northern vs. La Plata", score: "7 – 0" },
+            { date: "Sep 24, 2026", matchup: "North Point vs. Leonardtown", score: "0 – 8" },
+            { date: "Sep 23, 2026", matchup: "Huntingtown vs. Westlake", score: "9 – 0" },
+            { date: "Sep 22, 2026", matchup: "Patuxent vs. Great Mills", score: "1 – 6" },
+            { date: "Sep 17, 2026", matchup: "Patuxent vs. La Plata", score: "0 – 6" },
+            { date: "Sep 17, 2026", matchup: "Henry E. Lackey vs. Westlake", score: "3 – 1" },
+            { date: "Sep 17, 2026", matchup: "Calvert vs. Northern-C", score: "1 – 1" },
+            { date: "Sep 17, 2026", matchup: "Huntingtown vs. McDonough", score: "0 – 2" },
+            { date: "Sep 17, 2026", matchup: "St. Charles vs. Leonardtown", score: "0 – 11" },
+            { date: "Sep 17, 2026", matchup: "Chopticon vs. North Point", score: "2 – 5" },
+            { date: "Sep 15, 2026", matchup: "Patuxent vs. North Point", score: "2 – 6" },
+            { date: "Sep 15, 2026", matchup: "Henry E. Lackey vs. La Plata", score: "1 – 6" },
+            { date: "Sep 15, 2026", matchup: "Huntingtown vs. Great Mills", score: "4 – 0" },
+            { date: "Sep 15, 2026", matchup: "McDonough vs. Chopticon", score: "9 – 1" },
+            { date: "Sep 15, 2026", matchup: "Westlake vs. Leonardtown", score: "0 – 11" },
+            { date: "Sep 15, 2026", matchup: "Northern-C vs. St. Charles", score: "14 – 0" },
+            { date: "Sep 14, 2026", matchup: "La Plata vs. Oxon Hill", score: "6 – 1" },
+            { date: "Sep 11, 2026", matchup: "Henry E. Lackey vs. Calverton", score: "No Score" },
+            { date: "Sep 11, 2026", matchup: "McDonough vs. North Point", score: "0 – 1" },
+            { date: "Sep 10, 2026", matchup: "Liberty vs. Great Mills", score: "10 – 2" },
+            { date: "Sep 10, 2026", matchup: "Patuxent vs. Chopticon", score: "2 – 7" },
+            { date: "Sep 10, 2026", matchup: "Henry E. Lackey vs. Huntingtown", score: "0 – 11" },
+            { date: "Sep 10, 2026", matchup: "Calvert vs. St. Charles", score: "11 – 1" },
+            { date: "Sep 10, 2026", matchup: "La Plata vs. Leonardtown", score: "1 – 4" },
+            { date: "Sep 8, 2026", matchup: "Patuxent vs. St. Charles", score: "9 – 1" },
+            { date: "Sep 8, 2026", matchup: "Henry E. Lackey vs. McDonough", score: "0 – 13" },
+            { date: "Sep 8, 2026", matchup: "Calvert vs. North Point", score: "1 – 0" },
+            { date: "Sep 8, 2026", matchup: "La Plata vs. Chopticon", score: "4 – 1" },
+            { date: "Sep 8, 2026", matchup: "Westlake vs. Great Mills", score: "1 – 9" },
+            { date: "Sep 8, 2026", matchup: "Northern-C vs. Leonardtown", score: "0 – 3" },
+            { date: "Sep 5, 2026", matchup: "La Plata vs. Marriotts Ridge", score: "1 – 1" },
+            { date: "Sep 5, 2026", matchup: "La Plata vs. Southern-AA", score: "1 – 1" }
         ];
 
         // All-Conference Placeholder Slots for 2026
@@ -346,7 +445,7 @@
                     { name: "Neala Rooney", school: "La Plata", grade: "11", pos: "Midfield", team: "2" },
                     { name: "Sammie Kindall", school: "Lackey", grade: "12", pos: "Midfield", team: "2" },
                     { name: "Yasmeen Bouhussein", school: "Leonardtown", grade: "11", pos: "Midfield", team: "2" },
-                    { name: "Alexis Metzgar", school: "North Point", grade: "10", pos: "Midfield", team: "2" }
+                    { name: "Alexis Metzger", school: "North Point", grade: "10", pos: "Midfield", team: "2" }
                 ],
                 honorableMention: [
                     { school: "Calvert", players: ["Abigail Epidendio", "Gwen Eggleton"] },
@@ -441,6 +540,40 @@
                     </tr>
                 `;
             }).join('');
+        }
+
+        // Render Conference Results Table
+        function renderResults(data = smacResults) {
+            const tbody = document.getElementById('resultsBody');
+            if (!tbody) return;
+
+            tbody.innerHTML = data.map((item, index) => {
+                const rowBg = index % 2 === 0 ? 'bg-[#611520]' : 'bg-[#781C28]/40';
+                const scoreStyle = item.score === 'No Score' ? 'text-[#E0A100]/50 italic' : 'font-black text-[#E0A100] bg-maroon-card px-3 py-1 rounded-lg border border-[#E0A100]/30';
+
+                return `
+                    <tr class="${rowBg} hover:bg-[#E0A100]/10 transition-colors">
+                        <td class="p-4 text-xs text-[#E0A100] font-bold">${item.date}</td>
+                        <td class="p-4 font-semibold text-white/90">
+                            ${item.matchup}
+                        </td>
+                        <td class="p-4 text-center">
+                            <span class="${scoreStyle}">${item.score}</span>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Filter Results
+        function filterResults() {
+            const query = document.getElementById('resultsSearch').value.toLowerCase();
+            const filtered = smacResults.filter(r => 
+                r.matchup.toLowerCase().includes(query) || 
+                r.date.toLowerCase().includes(query) ||
+                r.score.toLowerCase().includes(query)
+            );
+            renderResults(filtered);
         }
 
         // Render All-Conference Grid for 2026
@@ -581,6 +714,7 @@
         // Initialize Page
         document.addEventListener('DOMContentLoaded', () => {
             renderStandings();
+            renderResults();
             filterAllConference('1st');
             if (typeof lucide !== 'undefined' && lucide.createIcons) {
                 lucide.createIcons();

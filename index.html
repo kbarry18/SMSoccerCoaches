@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Southern Maryland Soccer Coaches Association (SMSCA)</title>
+    <title>Southern Maryland Soccer Coaches Association - Girls Soccer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -77,11 +77,14 @@
 
     <main class="max-w-[1480px] mx-auto px-4 sm:px-8 mt-8 space-y-16">
 
-        <section class="bg-maroon-card rounded-2xl p-8 border border-[#E0A100]/40 glow-gold relative overflow-hidden text-center flex flex-col items-center justify-center gap-6">
+        <section class="bg-maroon-card rounded-2xl p-8 border border-[#E0A100]/40 glow-gold relative overflow-hidden text-center flex flex-col items-center justify-center gap-4">
             <div class="absolute inset-0 bg-[radial-gradient(#E0A100_1px,transparent_1px)] [background-size:16px_16px] opacity-10 pointer-events-none"></div>
             
             <div class="space-y-3 relative z-10 w-full text-center">
-                <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight">SOUTHERN MARYLAND SOCCER COACHES ASSOCIATION</h2>
+                <span class="inline-flex items-center gap-2 bg-[#E0A100]/15 text-[#E0A100] text-xs font-extrabold px-4 py-1.5 rounded-full border border-[#E0A100]/40 uppercase tracking-widest shadow-sm">
+                    Southern Maryland Soccer Coaches Association
+                </span>
+                <h2 class="text-4xl sm:text-5xl font-black text-white tracking-tight">GIRLS SOCCER</h2>
             </div>
         </section>
 
@@ -128,10 +131,32 @@
                     <p class="text-xs text-[#E0A100]/90 mt-1 font-medium">Complete SMAC schedule and game-by-game results</p>
                 </div>
 
-                <!-- Search Filter -->
-                <div class="relative w-full sm:w-64">
-                    <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#E0A100]"></i>
-                    <input type="text" id="resultsSearch" onkeyup="filterResults()" placeholder="Filter team or date..." class="w-full pl-9 pr-3 py-2 bg-maroon-card border border-[#E0A100]/30 rounded-xl text-xs font-bold text-white placeholder-[#E0A100]/50 focus:outline-none focus:ring-2 focus:ring-[#E0A100]" />
+                <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                    <!-- School Filter Dropdown -->
+                    <div class="relative w-full sm:w-56">
+                        <select id="schoolFilter" onchange="filterResults()" class="w-full px-3 py-2 bg-maroon-card border border-[#E0A100]/30 rounded-xl text-xs font-bold text-[#E0A100] focus:outline-none focus:ring-2 focus:ring-[#E0A100] cursor-pointer">
+                            <option value="">🏫 Filter by School...</option>
+                            <option value="Leonardtown">Leonardtown</option>
+                            <option value="Northern">Northern</option>
+                            <option value="Huntingtown">Huntingtown</option>
+                            <option value="McDonough">McDonough</option>
+                            <option value="Calvert">Calvert</option>
+                            <option value="North Point">North Point</option>
+                            <option value="La Plata">La Plata</option>
+                            <option value="Chopticon">Chopticon</option>
+                            <option value="Great Mills">Great Mills</option>
+                            <option value="Patuxent">Patuxent</option>
+                            <option value="Lackey">Henry E. Lackey</option>
+                            <option value="Westlake">Westlake</option>
+                            <option value="St. Charles">St. Charles</option>
+                        </select>
+                    </div>
+
+                    <!-- Search Filter -->
+                    <div class="relative w-full sm:w-64">
+                        <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#E0A100]"></i>
+                        <input type="text" id="resultsSearch" onkeyup="filterResults()" placeholder="Filter team or date..." class="w-full pl-9 pr-3 py-2 bg-maroon-card border border-[#E0A100]/30 rounded-xl text-xs font-bold text-white placeholder-[#E0A100]/50 focus:outline-none focus:ring-2 focus:ring-[#E0A100]" />
+                    </div>
                 </div>
             </div>
 
@@ -251,7 +276,7 @@
     </footer>
 
     <script>
-        // Standings Data including Ties (T)
+        // Standings Data
         const smacStandings = [
             { team: "Leonardtown", w: 10, l: 0, t: 0, gp: 10, pct: "1.000" },
             { team: "Northern", w: 10, l: 1, t: 1, gp: 12, pct: ".875" },
@@ -268,7 +293,7 @@
             { team: "St. Charles", w: 0, l: 10, t: 0, gp: 10, pct: ".000" }
         ];
 
-        // Conference Game Results (Without LP Match tags)
+        // Conference Game Results
         const smacResults = [
             { date: "Oct 15, 2026", matchup: "Henry E. Lackey vs. Chopticon", score: "0 – 8" },
             { date: "Oct 15, 2026", matchup: "Calvert vs. La Plata", score: "6 – 0" },
@@ -565,14 +590,18 @@
             }).join('');
         }
 
-        // Filter Results
+        // Filter Results by School and Search Query
         function filterResults() {
             const query = document.getElementById('resultsSearch').value.toLowerCase();
-            const filtered = smacResults.filter(r => 
-                r.matchup.toLowerCase().includes(query) || 
-                r.date.toLowerCase().includes(query) ||
-                r.score.toLowerCase().includes(query)
-            );
+            const school = document.getElementById('schoolFilter').value.toLowerCase();
+
+            const filtered = smacResults.filter(r => {
+                const matchesQuery = r.matchup.toLowerCase().includes(query) || 
+                                     r.date.toLowerCase().includes(query) ||
+                                     r.score.toLowerCase().includes(query);
+                const matchesSchool = school === "" || r.matchup.toLowerCase().includes(school);
+                return matchesQuery && matchesSchool;
+            });
             renderResults(filtered);
         }
 

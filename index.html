@@ -82,7 +82,7 @@
             
             <div class="space-y-3 relative z-10 w-full text-center">
                 <span class="inline-flex items-center gap-2 bg-[#E0A100]/15 text-[#E0A100] text-xs font-extrabold px-4 py-1.5 rounded-full border border-[#E0A100]/40 uppercase tracking-widest shadow-sm">
-                    Southern Maryland Soccer Coaches Association
+                    SOUTHERN MARYLAND SOCCER COACHES ASSOCIATION
                 </span>
                 <h2 class="text-4xl sm:text-5xl font-black text-white tracking-tight">GIRLS SOCCER</h2>
             </div>
@@ -636,7 +636,7 @@
             `).join('');
         }
 
-        // Open Season Archive Modal with detailed tables
+        // Open Season Archive Modal with detailed tables (No Major Award Titles)
         function openSeasonArchive(year) {
             const data = seasonArchives[year];
             if (!data) return;
@@ -644,18 +644,15 @@
             document.getElementById('modalTitle').innerText = data.title;
             
             let html = `
-                <!-- Major Awards -->
-                <div class="space-y-3">
-                    <h4 class="text-xs font-black uppercase text-[#E0A100] tracking-wider">🌟 Major Season Awards</h4>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        ${data.majorAwards.map(award => `
-                            <div class="bg-maroon-card p-4 rounded-xl border border-[#E0A100]/30 shadow-md">
-                                <span class="text-[10px] font-bold text-[#E0A100] uppercase">${award.title}</span>
-                                <h5 class="text-base font-black text-white mt-0.5">${award.recipient}</h5>
-                                <span class="text-xs text-cream/80">${award.school}</span>
-                            </div>
-                        `).join('')}
-                    </div>
+                <!-- Major Awards Tiles (No Title) -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    ${data.majorAwards.map(award => `
+                        <div class="bg-maroon-card p-4 rounded-xl border border-[#E0A100]/30 shadow-md">
+                            <span class="text-[10px] font-bold text-[#E0A100] uppercase">${award.title}</span>
+                            <h5 class="text-base font-black text-white mt-0.5">${award.recipient}</h5>
+                            <span class="text-xs text-cream/80">${award.school}</span>
+                        </div>
+                    `).join('')}
                 </div>
 
                 <!-- 1st Team -->
